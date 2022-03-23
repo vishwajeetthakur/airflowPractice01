@@ -1,0 +1,11 @@
+file name and dag id should be same
+
+to run the code 
+docker-compose up --build
+
+docker-compose down
+
+to run vim on container 
+docker exec --user="root" -it (container ID) /bin/bash
+apt-get update
+apt-get install vim
