@@ -128,7 +128,20 @@ first_function_execute >> second_function_execute
 third_function_execute >> fourth_function_execute
 
 '''
- ---> every dag is working fine
- ---> IexusSecurities # retries me no time difference : --> *******
- ---> small --> pipeline 
+what i have done
+-- applied retry logic by clearing task instance state
+
+deduction from this dag :
+    1. cheking the airflow CLI doing ls...now we are able to see 3 files named 
+    " first {num}.txt "
+
+Conclusion:
+    when this ran
+    first fucntion >> second fucntion
+
+    1. first file formed due to ....first fucntion in the very first run of first fucntion
+    2. second file formed due to ...when second fucntion executes and get failed first time...first fucntion state got cleared and new file is foremed due t0 first fucntion
+    3. third file formed due to ....when second fucntion executes and get failed second time...first fucntion state got cleared and new file is foremed due t0 first fucntion
+
+    So we can say this approach is working fine and doing actual retries.
 '''
