@@ -4,7 +4,6 @@ from email.policy import default
 import logging
 from datetime import timedelta
 from airflow import DAG
-    
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
 from airflow.models import DAG, taskinstance
@@ -17,43 +16,16 @@ import random
 
 print("All Dag modules are ok ......")
 
-
-
-
 log = logging.getLogger(__name__)
 
-
 print("******** its runing *********")
-@provide_session
-def clear_task(task_id, session = None, adr = False, dag = None):
-    print("in clear task******")
-    print(task_id)
-    taskinstance.clear_task_instances(tis = task_id,
-                                      session = session,
-                                      activate_dag_runs = adr,
-                                      dag = dag)
-    print("********************** clear task is completed ")
-
-def retry_upstream_task(context):
-
-    print("% Retry upstream is called ")
-    tasks = context["dag_run"].get_task_instances()
-    dag = context["dag"]
-    to_retry = context["params"].get("to_retry", [])
-
-    task_to_retry = [ ti for ti in tasks if ti.task_id in to_retry ]
-
-    clear_task(task_to_retry, dag = dag)
-    print("% ** Retry upstream is completed ")
-
-
 
 def first_function_execute(**context):
     log.critical("\n############## this is critical log ########")
 
     print("****we are in first fucntion****")
     num = random.randint(0,10000)
-    fname = f"first {num}.txt"
+    fname = f"without_retry_first {num}.txt"
     f = open(fname,"w+")
     f.close()
     print(num)
@@ -68,7 +40,7 @@ def second_function_execute(**context):
 
 def third_function_execute(**context):
     num = random.randint(0,10000)
-    fname = f"third__ {num}.txt"
+    fname = f"without_retry_third__ {num}.txt"
     f = open(fname,"w+")
     f.close()
     print("File creation done in first fucntion")
@@ -80,9 +52,9 @@ def fourth_function_execute(**context):
     print("fourth fucntion") 
 #*/2 * * * * execute evreyt two mintes
 
-#docker exec -it b9624c977b70a1f7a2c37e3cf2f453d794522966e33b865e51c6b5a47f65d50d /bin/sh
+#docker exec -it container_id /bin/sh
 with DAG(
-    dag_id="first_dag",
+    dag_id="Without_retry_dag",
     schedule_interval="@daily",
     default_args={
         "owner":"airflow",
@@ -105,8 +77,7 @@ with DAG(
         python_callable=second_function_execute,
         provide_context=True,
         retries= 2,
-        on_retry_callback=retry_upstream_task,
-        params = {"to_retry":['first_function_execute']}
+
     )
 
     third_function_execute = PythonOperator(

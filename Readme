@@ -9,3 +9,7 @@ to run vim on container
 docker exec --user="root" -it (container ID) /bin/bash
 apt-get update
 apt-get install vim
+
+
+https://stackoverflow.com/questions/58180281/programmatically-clear-the-state-of-airflow-task-instances
+https://towardsdatascience.com/bet-you-didnt-know-this-about-airflow-47aae4e7b687
