@@ -1,15 +1,17 @@
-file name and dag id should be same
-
-to run the code 
+#To run use 
 docker-compose up --build
 
+#to stop and exit the docker-compose
 docker-compose down
 
-to run vim on container 
+
+# some extra tips
+To run vim on container 
 docker exec --user="root" -it (container ID) /bin/bash
 apt-get update
 apt-get install vim
 
+# refs to clear upstream task in airflow
 
 https://stackoverflow.com/questions/58180281/programmatically-clear-the-state-of-airflow-task-instances
 https://towardsdatascience.com/bet-you-didnt-know-this-about-airflow-47aae4e7b687
